@@ -61,45 +61,6 @@ CREATE TABLE IF NOT EXISTS goods (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 商品评价表
-CREATE TABLE IF NOT EXISTS reviews (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    goods_id INTEGER REFERENCES goods(id) ON DELETE CASCADE,
-    order_id INTEGER REFERENCES orders(id) ON DELETE SET NULL,
-    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-    content TEXT DEFAULT '',
-    images JSONB DEFAULT '[]',
-    reply TEXT DEFAULT '',
-    reply_at TIMESTAMP,
-    status VARCHAR(20) DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- 商品收藏表
-CREATE TABLE IF NOT EXISTS favorites (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    goods_id INTEGER REFERENCES goods(id) ON DELETE CASCADE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, goods_id)
-);
-
--- 购物车表
-CREATE TABLE IF NOT EXISTS cart_items (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    goods_id INTEGER REFERENCES goods(id) ON DELETE CASCADE,
-    name VARCHAR(200) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    image VARCHAR(500) DEFAULT '',
-    quantity INTEGER DEFAULT 1,
-    selected BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- 收货地址表
 CREATE TABLE IF NOT EXISTS addresses (
     id SERIAL PRIMARY KEY,
@@ -158,6 +119,45 @@ CREATE TABLE IF NOT EXISTS order_status_history (
     status VARCHAR(20) NOT NULL,
     remark TEXT DEFAULT '',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 购物车表
+CREATE TABLE IF NOT EXISTS cart_items (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    goods_id INTEGER REFERENCES goods(id) ON DELETE CASCADE,
+    name VARCHAR(200) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    image VARCHAR(500) DEFAULT '',
+    quantity INTEGER DEFAULT 1,
+    selected BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 商品评价表
+CREATE TABLE IF NOT EXISTS reviews (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    goods_id INTEGER REFERENCES goods(id) ON DELETE CASCADE,
+    order_id INTEGER REFERENCES orders(id) ON DELETE SET NULL,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    content TEXT DEFAULT '',
+    images JSONB DEFAULT '[]',
+    reply TEXT DEFAULT '',
+    reply_at TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 商品收藏表
+CREATE TABLE IF NOT EXISTS favorites (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    goods_id INTEGER REFERENCES goods(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, goods_id)
 );
 
 -- 支付方式表
@@ -246,12 +246,12 @@ INSERT INTO roles (id, name, description, permissions) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- 插入默认用户（密码: admin123）
-INSERT INTO users (id, username, password_hash, avatar, nickname, phone, email, role_id, status) 
-VALUES (1, 'admin', '$2b$10$77Pi.gZeuGvBBe0sZa11mu/gmxB8PFVuah5qA6VVHlYLGWuxfcOn2', 'https://picsum.photos/200/200?random=10', '管理员', '138****8888', 'admin@example.com', 1, 'active')
+INSERT INTO users (id, username, password_hash, avatar, nickname, phone, email, role_id, status)
+VALUES (1, 'admin', '$2b$10$77Pi.gZeuGvBBe0sZa11mu/gmxB5qA68PFVuahVVHlYLGWuxfcOn2', 'https://picsum.photos/200/200?random=10', '管理员', '138****8888', 'admin@example.com', 1, 'active')
 ON CONFLICT (id) DO NOTHING;
 
 -- 插入默认用户（密码: user123）
-INSERT INTO users (id, username, password_hash, avatar, nickname, phone, email, role_id, status) 
+INSERT INTO users (id, username, password_hash, avatar, nickname, phone, email, role_id, status)
 VALUES (2, 'user', '$2b$10$BkvR4uL42xP0IHkgY7Klh.ZSxI/h8mrnwFLNAMi9DMMUUe6yspId2', 'https://picsum.photos/200/200?random=11', '科技极客', '138****9999', 'user@example.com', 2, 'active')
 ON CONFLICT (id) DO NOTHING;
 
@@ -273,7 +273,7 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 插入商品数据
 INSERT INTO goods (id, category_id, name, price, original_price, image, images, sales, stock, specs, description, tags, status, is_hot, is_new, is_recommend) VALUES
-(1, 4, 'iPhone 15 Pro', 7999, 8999, 'https://picsum.photos/400/400?random=1', '["https://picsum.photos/400/400?random=1", "https://picsum.photos/400/400?random=11"]', 5200, 100, 
+(1, 4, 'iPhone 15 Pro', 7999, 8999, 'https://picsum.photos/400/400?random=1', '["https://picsum.photos/400/400?random=1", "https://picsum.photos/400/400?random=11"]', 5200, 100,
  '{"brand": "Apple", "model": "A3104", "storage": "256GB", "color": "钛金属", "warranty": "1年"}',
  '采用航空级钛金属设计，A17 Pro芯片，专业相机系统，全新操作按钮。',
  '["热销", "旗舰"]', 'active', true, true, true),
