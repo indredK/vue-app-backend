@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: vue-app-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: vue-app-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: vue-app-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: vue-app-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: vue-app-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: vue-app-db
+          property: password
+
+databases:
+  - name: vue-app-db
+    databaseName: shop_db
+    user: shop_user
+    plan: free
+    region: oregon
