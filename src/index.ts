@@ -19,7 +19,15 @@ import logsRouter, { logAction } from './routes/logs';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://indredk.github.io',
+    'https://indredk.github.io/vue-app'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {

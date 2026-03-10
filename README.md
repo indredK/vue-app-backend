@@ -2,6 +2,11 @@
 
 一个功能完整的电商商城后端API系统，基于Node.js + Express + TypeScript + PostgreSQL构建。
 
+## 🚀 在线访问
+
+- **API 文档**: https://indredk.github.io/vue-app-backend/
+- **API 地址**: https://your-backend-api.com/api
+
 ## 功能特性
 
 ### 核心功能
