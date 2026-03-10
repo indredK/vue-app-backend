@@ -1,26 +1,22 @@
-declare namespace Express {
-  export interface Request {
-    params: any;
-    query: any;
-    body: any;
-    headers: any;
-  }
-}
-
-declare namespace NodeJS {
-  export interface ProcessEnv {
+declare const process: {
+  env: {
     [key: string]: string | undefined;
-  }
-}
+    DB_HOST?: string;
+    DB_PORT?: string;
+    DB_NAME?: string;
+    DB_USER?: string;
+    DB_PASSWORD?: string;
+    PORT?: string;
+    NODE_ENV?: string;
+    JWT_SECRET?: string;
+  };
+  exit(code?: number): never;
+  argv: string[];
+};
 
-declare module 'express' {
-  import { Request, Response, NextFunction } from 'express';
-  
-  export interface AuthRequest extends Request {
-    user?: any;
-    params: any;
-    query: any;
-    body: any;
-    headers: any;
-  }
-}
+declare const console: {
+  log(...args: any[]): void;
+  error(...args: any[]): void;
+  warn(...args: any[]): void;
+  info(...args: any[]): void;
+};
