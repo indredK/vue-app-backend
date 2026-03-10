@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 
-import initDatabase from './init-db';
+const initDatabase = require('./init-db');
 import goodsRouter from './routes/goods';
 import usersRouter from './routes/users';
 import cartRouter from './routes/cart';

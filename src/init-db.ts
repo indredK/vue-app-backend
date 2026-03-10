@@ -1,6 +1,6 @@
-import { Pool } from 'pg';
-import fs from 'fs';
-import path from 'path';
+const { Pool } = require('pg');
+const fs = require('fs');
+const path = require('path');
 
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
@@ -31,4 +31,4 @@ if (require.main === module) {
   initDatabase();
 }
 
-export default initDatabase;
+module.exports = initDatabase;
