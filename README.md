@@ -4,8 +4,7 @@
 
 ## 🚀 在线访问
 
-- **API 文档**: https://indredk.github.io/vue-app-backend/
-- **API 地址**: https://your-backend-api.com/api
+- **API 地址**: https://vue-app-backend-1olu.onrender.com
 
 ## 功能特性
 
