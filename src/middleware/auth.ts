@@ -3,6 +3,9 @@ import { verifyToken, TokenPayload } from '../utils/auth';
 
 export interface AuthRequest extends Request {
   user?: TokenPayload;
+  params: Record<string, string>;
+  query: Record<string, any>;
+  body: any;
 }
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
