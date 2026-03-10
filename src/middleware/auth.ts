@@ -6,6 +6,10 @@ export interface AuthRequest extends Request {
   params: Record<string, string>;
   query: Record<string, any>;
   body: any;
+  headers: {
+    [key: string]: string | string[] | undefined;
+    authorization?: string;
+  };
 }
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
