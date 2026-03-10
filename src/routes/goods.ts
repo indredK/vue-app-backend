@@ -24,9 +24,26 @@ router.get('/', async (req: Request, res: Response) => {
 
     const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
 
-    const validSorts = ['created_at', 'price', 'sales', 'name'];
-    const sortField = validSorts.includes(sort as string) ? sort : 'created_at';
-    const sortOrder = (order as string).toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+    const validSorts = ['created_at', 'price', 'price_asc', 'price_desc', 'sales', 'name'];
+    let sortField: string = 'created_at';
+    let sortOrder = 'DESC';
+    
+    if (sort === 'price_asc') {
+      sortField = 'price';
+      sortOrder = 'ASC';
+    } else if (sort === 'price_desc') {
+      sortField = 'price';
+      sortOrder = 'DESC';
+    } else if (sort === 'sales') {
+      sortField = 'sales';
+      sortOrder = 'DESC';
+    } else if (sort === 'name') {
+      sortField = 'name';
+      sortOrder = 'ASC';
+    } else if (validSorts.includes(sort as string)) {
+      sortField = sort as string;
+      sortOrder = (order as string).toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+    }
 
     const conditions: string[] = ['status = $1'];
     const values: any[] = ['active'];
@@ -38,8 +55,34 @@ router.get('/', async (req: Request, res: Response) => {
     }
 
     if (categoryId) {
-      conditions.push(`category_id = $${paramCount++}`);
-      values.push(parseInt(categoryId as string));
+      const categoryIdNum = parseInt(categoryId as string);
+      
+      const categoryResult = await query('SELECT * FROM categories WHERE id = $1', [categoryIdNum]);
+      
+      if (categoryResult.rows.length > 0) {
+        const category = categoryResult.rows[0];
+        
+        if (category.parent_id === 0) {
+          const subCategoriesResult = await query('SELECT id FROM categories WHERE parent_id = $1', [categoryIdNum]);
+          const subCategoryIds = subCategoriesResult.rows.map(row => row.id);
+          
+          if (subCategoryIds.length > 0) {
+            const allCategoryIds = [categoryIdNum, ...subCategoryIds];
+            const placeholders = allCategoryIds.map((_, idx) => `$${paramCount++}`).join(', ');
+            conditions.push(`category_id IN (${placeholders})`);
+            values.push(...allCategoryIds);
+          } else {
+            conditions.push(`category_id = $${paramCount++}`);
+            values.push(categoryIdNum);
+          }
+        } else {
+          conditions.push(`category_id = $${paramCount++}`);
+          values.push(categoryIdNum);
+        }
+      } else {
+        conditions.push(`category_id = $${paramCount++}`);
+        values.push(categoryIdNum);
+      }
     }
 
     if (minPrice) {

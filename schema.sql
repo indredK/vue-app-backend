@@ -247,12 +247,12 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 插入默认用户（密码: admin123）
 INSERT INTO users (id, username, password_hash, avatar, nickname, phone, email, role_id, status) 
-VALUES (1, 'admin', '$2b$10$rZ8Z8Z8Z8Z8Z8Z8Z8Z8Z8e', 'https://picsum.photos/200/200?random=10', '管理员', '138****8888', 'admin@example.com', 1, 'active')
+VALUES (1, 'admin', '$2b$10$77Pi.gZeuGvBBe0sZa11mu/gmxB8PFVuah5qA6VVHlYLGWuxfcOn2', 'https://picsum.photos/200/200?random=10', '管理员', '138****8888', 'admin@example.com', 1, 'active')
 ON CONFLICT (id) DO NOTHING;
 
 -- 插入默认用户（密码: user123）
 INSERT INTO users (id, username, password_hash, avatar, nickname, phone, email, role_id, status) 
-VALUES (2, 'user', '$2b$10$rZ8Z8Z8Z8Z8Z8Z8Z8Z8Z8f', 'https://picsum.photos/200/200?random=11', '科技极客', '138****9999', 'user@example.com', 2, 'active')
+VALUES (2, 'user', '$2b$10$BkvR4uL42xP0IHkgY7Klh.ZSxI/h8mrnwFLNAMi9DMMUUe6yspId2', 'https://picsum.photos/200/200?random=11', '科技极客', '138****9999', 'user@example.com', 2, 'active')
 ON CONFLICT (id) DO NOTHING;
 
 -- 插入商品分类
