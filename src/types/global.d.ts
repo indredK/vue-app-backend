@@ -12,3 +12,15 @@ declare namespace NodeJS {
     [key: string]: string | undefined;
   }
 }
+
+declare module 'express' {
+  import { Request, Response, NextFunction } from 'express';
+  
+  export interface AuthRequest extends Request {
+    user?: any;
+    params: any;
+    query: any;
+    body: any;
+    headers: any;
+  }
+}
